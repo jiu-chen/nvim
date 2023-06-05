@@ -49,6 +49,8 @@ Plug 'numToStr/Comment.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 
 call plug#end()
 
@@ -81,7 +83,6 @@ let g:coc_global_extensions = [
 		\ 'coc-explorer',
 		\ 'coc-lists',
 		\ 'coc-highlight',
-		\ 'coc-spell-checker',
 		\ 'coc-marketplace',
 		\ 'coc-yank',
 		\ 'coc-floaterm',
@@ -159,7 +160,7 @@ nmap <leader>rn <Plug>(coc-rename)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s)
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  autocmd FileType go,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
@@ -309,6 +310,3 @@ let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
-
-
-

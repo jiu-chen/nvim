@@ -2,7 +2,6 @@
 	"explorer.width": 38,
 	"explorer.quitOnOpen": true,
 	"explorer.icon.enableNerdfont": true,
-	"explorer.file.column.git.showIgnored": true,
 	"explorer.buffer.showHiddenBuffers": false,
 	"explorer.file.showHiddenFiles": true,
 	"colors.enable": true,
