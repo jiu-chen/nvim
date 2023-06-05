@@ -20,14 +20,14 @@ let mapleader="\<space>"
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 
-" =============
+" ============
 " basic keymap
-" =============
+" ============
 inoremap jk <ESC>
 
-" =============
+" =======
 " plugins
-" =============
+" =======
 call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -54,17 +54,17 @@ call plug#end()
 
 
 
+" color theme
 colo deus
 let g:airline_theme='deus'
 
 
 
 
-" =======
+" ===
 " coc
-" =======
+" ===
 let g:coc_global_extensions = [
-		\ 'coc-marketplace',
 		\ 'coc-json',
 		\ 'coc-vimlsp',
 		\ 'coc-markdownlint',
@@ -80,6 +80,11 @@ let g:coc_global_extensions = [
 		\ 'coc-snippets',
 		\ 'coc-explorer',
 		\ 'coc-lists',
+		\ 'coc-highlight',
+		\ 'coc-spell-checker',
+		\ 'coc-marketplace',
+		\ 'coc-yank',
+		\ 'coc-floaterm',
 		\]
 
 " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
@@ -142,7 +147,7 @@ function! ShowDocumentation()
 endfunction
 
 " Highlight the symbol and its references when holding the cursor
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
@@ -265,17 +270,45 @@ nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
 nnoremap <silent> L :bnext<CR>
 nnoremap <silent> H :bprevious<CR>
 " In your init.lua or init.vim
-" lua << EOF
-" require("bufferline").setup{}
-" EOF
-"
-lua require("bufferline").setup{}
-lua require('Comment').setup()
+lua << EOF
+require("bufferline").setup{}
+EOF
+
+" comment
+lua << EOF
+require('Comment').setup()
+EOF
 
 
+" coc-go
 autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
 
+autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
 
+" nvim-treesitter
+lua << EOF
+require("nvim-treesitter.configs").setup({
+    ensure_installed = { "javascript", "go","gomod", "lua", "vim", "json", "html"},
+    sync_install = false,
+    auto_install = true,
+    highlight = {
+        enable = true,
+    },
+})
+EOF
+
+" coc-yank
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+
+" coc-floaterm
+" 需要先打开 floatterm via ":FloatermToggle"
+" floaterm configuration example
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_prev   = '<F8>'
+let g:floaterm_keymap_next   = '<F9>'
+let g:floaterm_keymap_toggle = '<F12>'
 
 
 
