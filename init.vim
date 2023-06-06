@@ -13,12 +13,27 @@ set ignorecase
 set smartcase
 set smartindent
 let mapleader="\<space>"
+set hlsearch
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+set autoindent
+set smartindent
+
 
 " =======
 " mapping
 " =======
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
 
 " ============
 " basic keymap
@@ -43,6 +58,8 @@ Plug 'voldikss/vim-floaterm'
 Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
 Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 
+Plug 'f-person/git-blame.nvim'
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 Plug 'numToStr/Comment.nvim'
@@ -50,6 +67,10 @@ Plug 'numToStr/Comment.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
+Plug 'tpope/vim-surround'
+
+Plug 'github/copilot.vim'
 
 
 call plug#end()
@@ -61,6 +82,8 @@ colo deus
 let g:airline_theme='deus'
 
 
+" git blame
+let g:gitblame_message_template = '<summary> • <date>'
 
 
 " ===
@@ -86,6 +109,10 @@ let g:coc_global_extensions = [
 		\ 'coc-marketplace',
 		\ 'coc-yank',
 		\ 'coc-floaterm',
+		\ 'coc-clangd',
+		\ 'coc-pyright',
+		\ 'coc-copilot',
+		\ 'coc-prettier',
 		\]
 
 " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
@@ -233,9 +260,13 @@ nnoremap <silent><nowait> <space>t  :<C-u>CocList extensions<cr>
 " Show commands
 nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Search file
+nnoremap <silent><nowait> <space>ff  :<C-u>CocList files<cr>
+" Grep
+nnoremap <silent><nowait> <space>fg  :<C-u>CocList grep<cr>
 " Do default action for next item
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item
@@ -244,32 +275,14 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " coc explorer
-nnoremap <silent><nowait> <space>e  <Cmd>CocCommand explorer<CR>
+nnoremap <silent><nowait> <space>e  :<C-u>CocCommand explorer<CR>
 
-" fzf
-nmap <leader>f [fzf-p]
-xmap <leader>f [fzf-p]
-
-nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
-nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
-nnoremap <silent> [fzf-p]b     :<C-u>CocCommand fzf-preview.Buffers<CR>
-nnoremap <silent> [fzf-p]B     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
-nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
-nnoremap <silent> [fzf-p]/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
-nnoremap <silent> [fzf-p]*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          [fzf-p]gr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
-nnoremap <silent> [fzf-p]t     :<C-u>CocCommand fzf-preview.BufferTags<CR>
-nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
-nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 " bufferline
 " 切换buffer
 nnoremap <silent> L :bnext<CR>
 nnoremap <silent> H :bprevious<CR>
+nnoremap <silent> <leader>bc :bdelete<cr>
 " In your init.lua or init.vim
 lua << EOF
 require("bufferline").setup{}
@@ -310,3 +323,5 @@ let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_prev   = '<F8>'
 let g:floaterm_keymap_next   = '<F9>'
 let g:floaterm_keymap_toggle = '<F12>'
+let floaterm_width  = 0.8
+let floaterm_height = 0.8
