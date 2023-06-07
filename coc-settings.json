@@ -1,20 +1,13 @@
 {
-	"explorer.width": 36,
-	"explorer.icon.enableNerdfont": true,
-	"explorer.buffer.showHiddenBuffers": false,
-	"explorer.file.showHiddenFiles": true,
-	"colors.enable": true,
-	"suggest.noselect": true,
-	"suggest.enablePreselect": false,
-	"coc.preferences.formatOnSaveFiletypes": [
-		"javascript",
-		"html",
-		"json",
-		"java",
-		"python",
-		"vue",
-		"c",
-		"cpp",
-		"go"
-	]
+  "explorer.width": 36,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.buffer.showHiddenBuffers": false,
+  "explorer.file.showHiddenFiles": true,
+  "explorer.file.reveal.auto": true,
+  "colors.enable": true,
+  "suggest.noselect": true,
+  "suggest.enablePreselect": false,
+  "list.source.files.args": ["--hidden", "--files"],
+  "coc.preferences.formatOnSave": true,
+  "coc.preferences.formatOnType": true
 }

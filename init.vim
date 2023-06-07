@@ -75,6 +75,8 @@ Plug 'tpope/vim-surround'
 
 Plug 'github/copilot.vim'
 
+" Plug 'lyokha/vim-xkbswitch'  " make vim slow
+
 
 call plug#end()
 
@@ -112,6 +114,7 @@ let g:coc_global_extensions = [
 colo deus
 
 
+" buffer
 nnoremap <silent> L :bnext<CR>
 nnoremap <silent> H :bprevious<CR>
 nnoremap <silent> <leader>bc :bdelete<cr>
@@ -128,9 +131,18 @@ let g:airline_theme='deus'
 let g:gitblame_message_template = '<summary> • <date>'
 
 
-" ===
-" coc
-" ===
+" 会特别卡
+" Enable vim-xkbswitch plugin  
+" let g:XkbSwitchEnabled = 1  
+" Use 'us' layout in normal mode  
+" let g:XkbSwitchNMap = 'us'  
+
+
+
+
+" ==========
+" coc config
+" ==========
 " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
 " delays and poor user experience
 set updatetime=100
@@ -284,8 +296,6 @@ nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Search file
 nnoremap <silent><nowait> <space>ff  :<C-u>CocList files<cr>
-" Grep
-nnoremap <silent><nowait> <space>fg  :<C-u>CocList grep<cr>
 " Do default action for next item
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item
@@ -295,6 +305,18 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " coc explorer
 nnoremap <silent><nowait> <space>e  :<C-u>CocCommand explorer<CR>
+
+" grep word under cursor
+command! -nargs=+ -complete=custom,s:GrepArgs Rg exe 'CocList grep '.<q-args>
+
+function! s:GrepArgs(...)
+  let list = ['-S', '-smartcase', '-i', '-ignorecase', '-w', '-word',
+        \ '-e', '-regex', '-u', '-skip-vcs-ignores', '-t', '-extension']
+  return join(list, "\n")
+endfunction
+
+" Keymapping for grep word under cursor with interactive mode
+nnoremap <silent> <Leader>fg :exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
 
 
 
