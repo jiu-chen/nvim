@@ -13,7 +13,7 @@ set ignorecase
 set smartcase
 set smartindent
 let mapleader="\<space>"
-set hlsearch
+set nohlsearch
 " show existing tab with 4 spaces width
 set tabstop=4
 " when indenting with '>', use 4 spaces width
@@ -52,13 +52,16 @@ Plug 'ajmwagar/vim-deus'
 
 Plug 'vim-airline/vim-airline'       
 Plug 'vim-airline/vim-airline-themes' "airline 的主题
+Plug 'f-person/git-blame.nvim'
+
+
+Plug 'tpope/vim-fugitive'  
 
 Plug 'voldikss/vim-floaterm'
 
 Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
 Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 
-Plug 'f-person/git-blame.nvim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
@@ -76,19 +79,6 @@ Plug 'github/copilot.vim'
 call plug#end()
 
 
-
-" color theme
-colo deus
-let g:airline_theme='deus'
-
-
-" git blame
-let g:gitblame_message_template = '<summary> • <date>'
-
-
-" ===
-" coc
-" ===
 let g:coc_global_extensions = [
 		\ 'coc-json',
 		\ 'coc-vimlsp',
@@ -99,6 +89,7 @@ let g:coc_global_extensions = [
 		\ 'coc-snippets',
 		\ 'coc-java',
 		\ 'coc-java-intellicode',
+		\ 'coc-tsserver',
 		\ 'coc-go',
 		\ 'coc-pyright',
 		\ 'coc-pairs',
@@ -113,8 +104,33 @@ let g:coc_global_extensions = [
 		\ 'coc-pyright',
 		\ 'coc-copilot',
 		\ 'coc-prettier',
+		\ 'coc-fzf-preview',
+		\ 'coc-git',
 		\]
 
+" color theme
+colo deus
+
+
+nnoremap <silent> L :bnext<CR>
+nnoremap <silent> H :bprevious<CR>
+nnoremap <silent> <leader>bc :bdelete<cr>
+
+" bufferline
+lua << EOF
+require("bufferline").setup{}
+EOF
+
+" airline_theme
+let g:airline_theme='deus'
+
+" git blame
+let g:gitblame_message_template = '<summary> • <date>'
+
+
+" ===
+" coc
+" ===
 " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
 " delays and poor user experience
 set updatetime=100
@@ -187,7 +203,8 @@ nmap <leader>rn <Plug>(coc-rename)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s)
-  autocmd FileType go,json setl formatexpr=CocAction('formatSelected')
+  " autocmd FileType python setlocal formatexpr=CocAction('formatSelected', 'black')  
+
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
@@ -250,7 +267,9 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " Add (Neo)Vim's native statusline support
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
+" autocmd User CocGitStatusChange {command}
 
 " Mappings for CoCList
 " Show all diagnostics
@@ -278,15 +297,6 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 nnoremap <silent><nowait> <space>e  :<C-u>CocCommand explorer<CR>
 
 
-" bufferline
-" 切换buffer
-nnoremap <silent> L :bnext<CR>
-nnoremap <silent> H :bprevious<CR>
-nnoremap <silent> <leader>bc :bdelete<cr>
-" In your init.lua or init.vim
-lua << EOF
-require("bufferline").setup{}
-EOF
 
 " comment
 lua << EOF
@@ -314,7 +324,7 @@ require("nvim-treesitter.configs").setup({
 EOF
 
 " coc-yank
-nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+nnoremap <silent> <space>yh  :<C-u>CocList -A --normal yank<cr>
 
 " coc-floaterm
 " 需要先打开 floatterm via ":FloatermToggle"
