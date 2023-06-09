@@ -50,9 +50,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ajmwagar/vim-deus'
 
 
-Plug 'vim-airline/vim-airline'       
-Plug 'vim-airline/vim-airline-themes' "airline 的主题
-Plug 'f-person/git-blame.nvim'
+" Plug 'vim-airline/vim-airline'       
+" Plug 'vim-airline/vim-airline-themes' "airline 的主题
+
+" Plug 'f-person/git-blame.nvim'
 
 
 Plug 'tpope/vim-fugitive'  
@@ -124,11 +125,21 @@ lua << EOF
 require("bufferline").setup{}
 EOF
 
-" airline_theme
-let g:airline_theme='deus'
+" airline
+" 设置airline主题  
+" let g:airline_theme='deus'
+
 
 " git blame
-let g:gitblame_message_template = '<summary> • <date>'
+" let g:gitblame_message_template = '<summary> • <date>'
+
+
+
+" Add (Neo)Vim's native statusline support
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline
+set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
+autocmd User CocGitStatusChange {command}
 
 
 " 会特别卡
@@ -136,8 +147,6 @@ let g:gitblame_message_template = '<summary> • <date>'
 " let g:XkbSwitchEnabled = 1  
 " Use 'us' layout in normal mode  
 " let g:XkbSwitchNMap = 'us'  
-
-
 
 
 " ==========
@@ -276,12 +285,6 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
-" Add (Neo)Vim's native statusline support
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-" set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
-" autocmd User CocGitStatusChange {command}
 
 " Mappings for CoCList
 " Show all diagnostics

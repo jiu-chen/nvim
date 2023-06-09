@@ -9,5 +9,6 @@
   "suggest.enablePreselect": false,
   "list.source.files.args": ["--hidden", "--files"],
   "coc.preferences.formatOnSave": true,
-  "coc.preferences.formatOnType": true
+  "coc.preferences.formatOnType": true,
+  "git.addGBlameToBufferVar": true
 }
