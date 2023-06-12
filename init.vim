@@ -11,8 +11,6 @@ set number
 set relativenumber
 set ignorecase
 set smartcase
-set smartindent
-let mapleader="\<space>"
 set nohlsearch
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -23,6 +21,7 @@ set expandtab
 set autoindent
 set smartindent
 
+let mapleader="\<space>"
 
 " =======
 " mapping
@@ -46,6 +45,9 @@ inoremap jk <ESC>
 call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 Plug 'ajmwagar/vim-deus'
 
@@ -105,6 +107,7 @@ let g:coc_global_extensions = [
 " color theme
 colo deus
 
+let g:airline_theme='deus'
 
 " buffer
 nnoremap <silent> L :bnext<CR>
@@ -117,14 +120,8 @@ require("bufferline").setup{}
 EOF
 
 " git blame
-let g:gitblame_message_template = '<summary> • <date>'
+let g:gitblame_message_template = '<author> • <date>'
 
-" Add (Neo)Vim's native statusline support
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
-autocmd User CocGitStatusChange {command}
 
 " ==========
 " coc config
@@ -265,11 +262,11 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 
 " Mappings for CoCList
 " Show all diagnostics
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>ca  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent><nowait> <space>t  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>ct  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <space>cc  :<C-u>CocList commands<cr>
 " Find symbol of current document
 " nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
@@ -291,6 +288,10 @@ nnoremap <silent> <Leader>fg :exe 'CocList grep'<CR>
 
 " Keymapping for grep word under cursor with interactive mode
 nnoremap <silent> <Leader>fw :exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
+
+" grep current word in current buffer
+nnoremap <silent> <space>fb  :exe 'CocList -I --normal --input='.expand('<cword>').' words'<CR>
+
 
 
 " comment
