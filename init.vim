@@ -49,25 +49,19 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'ajmwagar/vim-deus'
 
-
-" Plug 'vim-airline/vim-airline'       
-" Plug 'vim-airline/vim-airline-themes' "airline 的主题
-
-" Plug 'f-person/git-blame.nvim'
-
+Plug 'f-person/git-blame.nvim'
 
 Plug 'tpope/vim-fugitive'  
 
 Plug 'voldikss/vim-floaterm'
 
-Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
 Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
-
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 Plug 'numToStr/Comment.nvim'
 
+Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
@@ -75,9 +69,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 Plug 'tpope/vim-surround'
 
 Plug 'github/copilot.vim'
-
-" Plug 'lyokha/vim-xkbswitch'  " make vim slow
-
 
 call plug#end()
 
@@ -125,29 +116,15 @@ lua << EOF
 require("bufferline").setup{}
 EOF
 
-" airline
-" 设置airline主题  
-" let g:airline_theme='deus'
-
-
 " git blame
-" let g:gitblame_message_template = '<summary> • <date>'
-
-
+let g:gitblame_message_template = '<summary> • <date>'
 
 " Add (Neo)Vim's native statusline support
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline
-set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
 autocmd User CocGitStatusChange {command}
-
-
-" 会特别卡
-" Enable vim-xkbswitch plugin  
-" let g:XkbSwitchEnabled = 1  
-" Use 'us' layout in normal mode  
-" let g:XkbSwitchNMap = 'us'  
-
 
 " ==========
 " coc config
@@ -309,18 +286,11 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " coc explorer
 nnoremap <silent><nowait> <space>e  :<C-u>CocCommand explorer<CR>
 
-" grep word under cursor
-command! -nargs=+ -complete=custom,s:GrepArgs Rg exe 'CocList grep '.<q-args>
-
-function! s:GrepArgs(...)
-  let list = ['-S', '-smartcase', '-i', '-ignorecase', '-w', '-word',
-        \ '-e', '-regex', '-u', '-skip-vcs-ignores', '-t', '-extension']
-  return join(list, "\n")
-endfunction
+" grep
+nnoremap <silent> <Leader>fg :exe 'CocList grep'<CR>
 
 " Keymapping for grep word under cursor with interactive mode
-nnoremap <silent> <Leader>fg :exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
-
+nnoremap <silent> <Leader>fw :exe 'CocList -I --input='.expand('<cword>').' grep'<CR>
 
 
 " comment
